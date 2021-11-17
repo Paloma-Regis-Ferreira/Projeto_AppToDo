@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActionSheetController, AlertController, ToastController } from '@ionic/angular';
 import { toastController } from '@ionic/core';
+import { Button } from 'protractor';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +11,7 @@ import { toastController } from '@ionic/core';
 export class HomePage {
   tasks: any[] = [];//criando objeto vazio
   constructor(private alertCtrl: AlertController, private toastCtrl: ToastController, private actionSheetCtrl: ActionSheetController) {
-    let taskJson = localStorage.getItem('taskdb');//armazenando apos carregar
+    const taskJson = localStorage.getItem('taskdb');//armazenando apos carregar
     if(taskJson!=null){
       this.tasks = JSON.parse(taskJson);
     }
@@ -88,5 +89,32 @@ export class HomePage {
       }]
     });
     await actionSheet.present();
+  }
+
+  async delete(task: any){
+    const alert = await this.alertCtrl.create({
+      header: 'Confirma a exclusão?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('clicked cancel');
+          }
+        },
+        {
+          text: 'Confirmar',
+          role: 'confirm',
+          cssClass: 'secondary',
+          handler: () => {
+            this.tasks = this.tasks.filter(taskArray => task !== taskArray);
+            this.updateLocalStorage();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 }
