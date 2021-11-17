@@ -10,7 +10,9 @@
   <ion-list>
 
     <ion-item-sliding *ngFor="let task of tasks">
-      <ion-item>
+    <ion-icon slot="start" name="radio-button-off" *ngIf="!task.done"></ion-icon>
+    <ion-icon slot="start" name="checkmark-circle" color="success" *ngIf="task.done"></ion-icon>
+      <ion-item (click)="openActions(task)"><!--chamando a funcao openActions passando task como argumento-->
         <ion-label>{{task.name}}</ion-label>
       </ion-item>
       <ion-item-options side="start">
